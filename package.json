@@ -1,7 +1,7 @@
 {
-  "name": "terminal-menu",
+  "name": "extended-terminal-menu",
   "version": "2.1.1",
-  "description": "retro ansi terminal menus for serious 80s technicolor business",
+  "description": "retro ansi terminal menus for serious 80s technicolor business (fork of terminal-menu; contains unmerged pull requests)",
   "main": "index.js",
   "dependencies": {
     "charm_inheritance-fix": "^1.0.1",

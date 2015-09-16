@@ -1,6 +1,6 @@
-# terminal-menu
+# extended-terminal-menu
 
-retro ansi terminal menus for serious 80s technicolor business
+retro ansi terminal menus for serious 80s technicolor business **forked from terminal-menu (contains unmerged pull requests)**
 
 ![terminal menu](http://substack.net/images/screenshots/terminal_menu.png)
 
