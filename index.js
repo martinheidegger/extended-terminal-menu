@@ -1,4 +1,4 @@
-var createCharm = require('charm');
+var createCharm = require('charm_inheritance-fix');
 var inherits = require('inherits');
 var EventEmitter = require('events').EventEmitter;
 var through = require('through2');

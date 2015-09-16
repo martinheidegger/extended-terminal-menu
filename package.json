@@ -4,7 +4,7 @@
   "description": "retro ansi terminal menus for serious 80s technicolor business",
   "main": "index.js",
   "dependencies": {
-    "charm": "~0.1.2",
+    "charm_inheritance-fix": "^1.0.1",
     "duplexer2": "0.0.2",
     "inherits": "~2.0.0",
     "resumer": "~0.0.0",
