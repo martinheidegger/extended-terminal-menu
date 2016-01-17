@@ -213,9 +213,9 @@ class Menu extends EventEmitter {
         if (/^106\b/.test(codes)) bytes.shift()
         else bytes.splice(0, 3)
       } else if (KEYS.close.test(codes)) {
+        this.y = 0
         this.charm.reset()
-        this._input.end()
-        this._output.end()
+        this.close()
         bytes.shift()
       } else if (KEYS.enter.test(codes)) {
         this.charm.position(1, this.entries[this.entries.length - 1].y + 2)
