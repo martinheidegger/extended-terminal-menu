@@ -3,7 +3,7 @@ var inherits = require('inherits');
 var EventEmitter = require('events').EventEmitter;
 var through = require('through2');
 var duplexer = require('duplexer2');
-var wcsize = require('wcsize');
+var wcstring = require('wcstring');
 
 module.exports = function (opts) {
     return new Menu(opts || {});
@@ -179,7 +179,8 @@ Menu.prototype._drawRow = function (index) {
         this.charm.foreground(this.colors.fg);
     }
     
-    var len = this.width - wcsize(item.label) + 1;
+    var len = this.width - wcstring(item.label).size() + 1;
+
     this.charm.write(item.label + Array(Math.max(0, len)).join(' '));
 };
 
