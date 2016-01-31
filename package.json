@@ -9,7 +9,7 @@
     "inherits": "~2.0.0",
     "resumer": "~0.0.0",
     "through2": "^0.6.3",
-    "visualwidth": "~0.0.1"
+    "wcsize": "^1.0.0"
   },
   "scripts": {
     "test": "tap test/*.js"

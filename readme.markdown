@@ -7,7 +7,7 @@ retro ansi terminal menus for serious 80s technicolor business **forked from ter
 # example
 
 ``` js
-var Menu = require('terminal-menu');
+var Menu = require('extended-terminal-menu');
 var menu = Menu({ width: 29, x: 4, y: 2 });
 menu.reset();
 menu.write('SERIOUS BUSINESS TERMINAL\n');
@@ -38,7 +38,7 @@ menu.on('close', function () {
 # methods
 
 ``` js
-var createMenu = require('terminal-menu')
+var createMenu = require('extended-terminal-menu')
 ```
 
 ## var menu = createMenu(opts)
