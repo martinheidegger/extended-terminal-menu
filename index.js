@@ -11,6 +11,12 @@ module.exports = function (opts) {
 }
 
 const keywordLookup = supportsColor.supportsColor().has256 ? color.keyword.ansi256 : color.keyword.ansi16
+const KEYS = {
+  up: /^(27.91.65|27,79.65|107|16)\b/, // up or k
+  down: /^(27.91.66|27.79.66|106|14)\b/, // down or j
+  enter: /^(13|10)\b/,
+  close: /^(3|113)/ // ^C or q
+}
 
 function preparePadding (input) {
   if (typeof input === 'number') {
@@ -84,10 +90,10 @@ class Menu extends EventEmitter {
 
   add (item, cb) {
     if (typeof item === 'string') {
-      item = { label: item }
+        item = { label: item }
     }
     if (typeof cb === 'function') {
-      item.handler = cb
+        item.handler = cb
     }
     if (item.handler) {
       this.on('select', (selectedItem, index) => {
@@ -196,26 +202,25 @@ class Menu extends EventEmitter {
     var bytes = [].slice.call(buf)
     while (bytes.length) {
       var codes = [].join.call(bytes, '.')
-      if (/^(27.91.65|27,79.65|107|16)\b/.test(codes)) { // up or k
+      if (KEYS.up.test(codes)) {
         this.selected = (this.selected - 1 + this.entries.length) % this.entries.length
 
         this._drawRow(this.selected + 1)
         this._drawRow(this.selected)
         if (/^107\b/.test(codes)) bytes.shift()
         else bytes.splice(0, 3)
-      }
-      if (/^(27.91.66|27.79.66|106|14)\b/.test(codes)) { // down or j
+      } else if (KEYS.down.test(codes)) {
         this.selected = (this.selected + 1) % this.entries.length
         this._drawRow(this.selected - 1)
         this._drawRow(this.selected)
         if (/^106\b/.test(codes)) bytes.shift()
         else bytes.splice(0, 3)
-      } else if (/^(3|113)/.test(codes)) { // ^C or q
+      } else if (KEYS.close.test(codes)) {
         this.charm.reset()
         this._input.end()
         this._output.end()
         bytes.shift()
-      } else if (/^(13|10)\b/.test(codes)) { // enter
+      } else if (KEYS.enter.test(codes)) {
         this.charm.position(1, this.entries[this.entries.length - 1].y + 2)
         this.charm.display('reset')
         const item = this.entries[this.selected].item
