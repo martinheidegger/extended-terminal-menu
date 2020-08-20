@@ -3,10 +3,14 @@ var EventEmitter = require('events').EventEmitter;
 var through = require('through2');
 var duplexer = require('duplexer2');
 var wcstring = require('wcstring');
+const color = require('color-convert');
+const supportsColor = require('supports-color');
 
 module.exports = function (opts) {
     return new Menu(opts || {});
 }
+
+const keywordLookup = supportsColor.supportsColor().has256 ? color.keyword.ansi256 : color.keyword.ansi16;
 
 class Menu extends EventEmitter {
     constructor (opts) {
@@ -19,8 +23,8 @@ class Menu extends EventEmitter {
         this.lines = {};
         this.selected = opts.selected || 0;
         this.colors = {
-            fg: opts.fg || 'white',
-            bg: opts.bg || 'blue'
+            fg: typeof opts.fg === 'number' ? opts.fg : keywordLookup(opts.fg || 'white'),
+            bg: typeof opts.bg === 'number' ? opts.bg : keywordLookup(opts.bg || 'blue')
         };
         
         this.padding = opts.padding || {
