@@ -4,7 +4,7 @@
   "description": "retro ansi terminal menus for serious 80s technicolor business (fork of terminal-menu; contains unmerged pull requests)",
   "main": "index.js",
   "dependencies": {
-    "charm_inheritance-fix": "^1.0.1",
+    "charm": "^1.0.2",
     "duplexer2": "0.0.2",
     "inherits": "~2.0.0",
     "resumer": "~0.0.0",
