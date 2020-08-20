@@ -95,12 +95,9 @@ class Menu extends EventEmitter {
     if (typeof cb === 'function') {
         item.handler = cb
     }
-    if (item.handler) {
-      this.on('select', (selectedItem, index) => {
-        if (selectedItem === item) item.handler(item, index)
-      })
+    if (typeof item.line !== 'string') {
+      item.line = item.label
     }
-
     this.entries.push({
       x: this.x,
       y: this.y,
@@ -224,7 +221,10 @@ class Menu extends EventEmitter {
         this.charm.position(1, this.entries[this.entries.length - 1].y + 2)
         this.charm.display('reset')
         const item = this.entries[this.selected].item
-        this.emit('select', item.label, this.selected, item)
+        this.emit('select', item.line, this.selected, item)
+        if (typeof item.handler === 'function') {
+          item.handler(item, this.selected)
+        }
         bytes.shift()
       } else bytes.shift()
     }
