@@ -1,10 +1,25 @@
 # extended-terminal-menu
 
-retro ansi terminal menus for serious 80s technicolor business **forked from terminal-menu (contains unmerged pull requests)**
+retro ansi terminal menus for serious 80s technicolor business
+
+## fork
+
+This is an extended/updated version of `terminal-menu`, it contains following changes:
+
+- It uses `wcstring` which is a vast improvement to `visualwidth` for asian text
+- It has updated dependencies
+- It merged [#36](https://github.com/substack/terminal-menu/pull/36)
+- It allows `item` added to be complex objects
+- It will not exceed max listeners
+- It is linted with `standard`
+- It has an updated syntax to Node 6
+- It contains typescript definitions
+
+---
 
 ![terminal menu](http://substack.net/images/screenshots/terminal_menu.png)
 
-# example
+## example
 
 ``` js
 var Menu = require('extended-terminal-menu');
@@ -35,7 +50,7 @@ menu.on('close', function () {
 });
 ```
 
-# methods
+## methods
 
 ``` js
 var createMenu = require('extended-terminal-menu')
@@ -61,12 +76,17 @@ C-n/C-p.
 
 To quit out of the menu, hit `^C` or `q`.
 
-## menu.add(label, cb)
+## menu.add(label, [handler]) or menu.add({ label, [line], [handler] })
 
 Create a new selectable menu item with the string `label`.
 
-Optionally give a callback `cb(label, index)` that will fire with the label
+Optionally give a callback `handler(label, index, item)` that will fire with the label
 string and index when selected.
+
+It is also possible to pass the item in as object.
+
+`line` is an optional property which contains the way how the line should be rendered.
+In case some advanced renderings are supposed to take place.
 
 ## menu.write(msg)
 
