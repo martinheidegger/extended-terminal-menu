@@ -6,10 +6,6 @@ var wcstring = require('wcstring')
 const color = require('color-convert')
 const supportsColor = require('supports-color')
 
-module.exports = function (opts) {
-  return new Menu(opts || {})
-}
-
 const keywordLookup = supportsColor.supportsColor().has256 ? color.keyword.ansi256 : color.keyword.ansi16
 const KEYS = {
   up: /^(27.91.65|27.79.65|107|16)\b/, // up or k
@@ -35,9 +31,12 @@ function preparePadding (input) {
   }
 }
 
-class Menu extends EventEmitter {
+module.exports = class Menu extends EventEmitter {
   constructor (opts) {
     super()
+    if (!opts) {
+      opts = {}
+    }
     this.width = opts.width || 50
     this.x = opts.x || 1
     this.y = opts.y || 1
@@ -90,10 +89,10 @@ class Menu extends EventEmitter {
 
   add (item, cb) {
     if (typeof item === 'string') {
-        item = { label: item }
+      item = { label: item }
     }
     if (typeof cb === 'function') {
-        item.handler = cb
+      item.handler = cb
     }
     if (typeof item.line !== 'string') {
       item.line = item.label

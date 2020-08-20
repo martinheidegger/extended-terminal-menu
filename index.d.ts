@@ -5,7 +5,7 @@ import { Readable, Duplex } from 'stream'
 import { EventEmitter } from 'events'
 import charm from 'charm'
 
-declare namespace createMenu {
+declare namespace TerminalMenu {
   interface IMenuItem {
     x: number
     y: number
@@ -43,56 +43,54 @@ declare namespace createMenu {
     y: number
     item: TItem
   }
-  
-  interface IMenu <TItem extends IItem> extends EventEmitter {
-    width: number
-    x: number
-    y: number
-    init: { x: number, y: number }
-    entries: IEntry<TItem & { line: string }>[]
-    lines: { [index: number]: boolean }
-    selected: number
-    colors: {
-      fg: number
-      bg: number
-    }
-    padding: IPadding
-    size: {
-      x: number
-    }
-    charm: charm.CharmInstance
-    stream: Readable
-    createStream (): Duplex
-    add (label: string): void
-    add (label: string, handler: ISelectHandler<TItem>): void
-    add (item: TItem): void
-    add (item: TItem, handler: ISelectHandler<TItem>): void
-    write (msg: string): void
-    jump (labelOrIndex: number | string): void
-
-    close (): void
-    reset (): void
-
-    on (event: 'select', handler: ISelectHandler<TItem>): this
-    off (event: 'select', handler: ISelectHandler<TItem>): this
-    addEventListener (event: 'select', handler: ISelectHandler<TItem>): this
-    removeEventListener (event: 'select', handler: ISelectHandler<TItem>): this
-    listenerCount (event: 'select'): number
-    once (event: 'select', handler: ISelectHandler<TItem>): this
-    prependListener (event: 'select', handler: ISelectHandler<TItem>): this
-    prependOnceListener (event: 'select', handler: ISelectHandler<TItem>): this
-
-    on (event: 'close', handler: ICloseHandler): this
-    off (event: 'close', handler: ICloseHandler): this
-    addEventListener (event: 'close', handler: ICloseHandler): this
-    removeEventListener (event: 'close', handler: ICloseHandler): this
-    listenerCount (event: 'close'): number
-    once (event: 'close', handler: ICloseHandler): this
-    prependListener (event: 'close', handler: ICloseHandler): this
-    prependOnceListener (event: 'close', handler: ICloseHandler): this
-  }
 }
 
-declare function createMenu <TItem extends createMenu.IItem = createMenu.IItem> (opts?: createMenu.IOptions): createMenu.IMenu<TItem>
+declare class TerminalMenu <TItem extends TerminalMenu.IItem = TerminalMenu.IItem> extends EventEmitter {
+  constructor (opts?: TerminalMenu.IOptions)
+  width: number
+  x: number
+  y: number
+  init: { x: number, y: number }
+  entries: TerminalMenu.IEntry<TItem & { line: string }>[]
+  lines: { [index: number]: boolean }
+  selected: number
+  colors: {
+    fg: number
+    bg: number
+  }
+  padding: TerminalMenu.IPadding
+  size: {
+    x: number
+  }
+  charm: charm.CharmInstance
+  stream: Readable
+  createStream (): Duplex
+  add (label: string): void
+  add (label: string, handler: TerminalMenu.ISelectHandler<TItem>): void
+  add (item: TItem): void
+  add (item: TItem, handler: TerminalMenu.ISelectHandler<TItem>): void
+  write (msg: string): void
+  jump (labelOrIndex: number | string): void
 
-export = createMenu
+  close (): void
+  reset (): void
+
+  on (event: 'select', handler: TerminalMenu.ISelectHandler<TItem>): this
+  off (event: 'select', handler: TerminalMenu.ISelectHandler<TItem>): this
+  addEventListener (event: 'select', handler: TerminalMenu.ISelectHandler<TItem>): this
+  removeEventListener (event: 'select', handler: TerminalMenu.ISelectHandler<TItem>): this
+  listenerCount (event: 'select'): number
+  once (event: 'select', handler: TerminalMenu.ISelectHandler<TItem>): this
+  prependListener (event: 'select', handler: TerminalMenu.ISelectHandler<TItem>): this
+  prependOnceListener (event: 'select', handler: TerminalMenu.ISelectHandler<TItem>): this
+
+  on (event: 'close', handler: TerminalMenu.ICloseHandler): this
+  off (event: 'close', handler: TerminalMenu.ICloseHandler): this
+  addEventListener (event: 'close', handler: TerminalMenu.ICloseHandler): this
+  removeEventListener (event: 'close', handler: TerminalMenu.ICloseHandler): this
+  listenerCount (event: 'close'): number
+  once (event: 'close', handler: TerminalMenu.ICloseHandler): this
+  prependListener (event: 'close', handler:TerminalMenu.ICloseHandler): this
+  prependOnceListener (event: 'close', handler: TerminalMenu.ICloseHandler): this
+}
+export = TerminalMenu

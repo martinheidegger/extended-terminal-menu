@@ -8,6 +8,7 @@ This is an extended/updated version of `terminal-menu`, it contains following ch
 
 - It uses `wcstring` which is a vast improvement to `visualwidth` for asian text
 - It has updated dependencies
+- It exports a class instead of a function which makes extending it easier
 - It merged [#36](https://github.com/substack/terminal-menu/pull/36)
 - It allows `item` added to be complex objects
 - It will not exceed max listeners

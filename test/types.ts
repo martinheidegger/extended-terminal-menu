@@ -1,4 +1,4 @@
-import createMenu, { IOptions, IPadding, IItem, ISelectHandler } from '../'
+import Menu, { IOptions, IPadding, IItem, ISelectHandler } from '../'
 import createCharm, { CharmInstance } from 'charm'
 
 let opts: IOptions
@@ -27,7 +27,8 @@ opts = {
   charm: createCharm()
 }
 
-let menu = createMenu(opts)
+let menu = new Menu(opts)
+menu = new Menu()
 let charmInstance: CharmInstance = menu.charm
 let num: number = menu.x
 num = menu.y
@@ -44,7 +45,7 @@ interface ISuperItem extends IItem {
   isSuper: boolean
 }
 
-let menuSuper = createMenu<ISuperItem>()
+let menuSuper = new Menu<ISuperItem>()
 menuSuper.write('hi')
 menuSuper.add('hello')
 let handler: ISelectHandler<ISuperItem> = function (label, index, item) {
@@ -52,6 +53,7 @@ let handler: ISelectHandler<ISuperItem> = function (label, index, item) {
   sItem = this
   sItem = item
   let str: string = label
+  str = item.line
   let num: number = index
 }
 menuSuper.add('hello', handler)
@@ -59,3 +61,9 @@ menuSuper.add({ label: 'heya!', handler, isSuper: true })
 menuSuper.add({ label: 'ho!!', isSuper: false })
 let item: ISuperItem = menuSuper.entries[0].item
 menuSuper.close()
+
+class MyMenu extends Menu<ISuperItem> {
+  constructor () {
+    super()
+  }
+}
