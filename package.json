@@ -1,6 +1,6 @@
 {
   "name": "extended-terminal-menu",
-  "version": "2.1.4",
+  "version": "3.0.0",
   "description": "retro ansi terminal menus for serious 80s technicolor business (fork of terminal-menu; contains unmerged pull requests)",
   "main": "index.js",
   "dependencies": {
