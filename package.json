@@ -6,7 +6,6 @@
   "dependencies": {
     "charm": "^1.0.2",
     "duplexer2": "^0.1.4",
-    "inherits": "~2.0.0",
     "resumer": "~0.0.0",
     "through2": "^4.0.2",
     "wcstring": "^2.1.0"
