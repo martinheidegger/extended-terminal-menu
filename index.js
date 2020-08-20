@@ -12,6 +12,23 @@ module.exports = function (opts) {
 
 const keywordLookup = supportsColor.supportsColor().has256 ? color.keyword.ansi256 : color.keyword.ansi16
 
+function preparePadding (input) {
+  if (typeof input === 'number') {
+    return {
+      left: input,
+      right: input,
+      top: input,
+      bottom: input
+    }
+  }
+  return input || {
+    left: 2,
+    right: 2,
+    top: 1,
+    bottom: 1
+  }
+}
+
 class Menu extends EventEmitter {
   constructor (opts) {
     super()
@@ -19,7 +36,7 @@ class Menu extends EventEmitter {
     this.x = opts.x || 1
     this.y = opts.y || 1
     this.init = { x: this.x, y: this.y }
-    this.items = []
+    this.entries = []
     this.lines = {}
     this.selected = opts.selected || 0
     this.colors = {
@@ -27,20 +44,7 @@ class Menu extends EventEmitter {
       bg: typeof opts.bg === 'number' ? opts.bg : keywordLookup(opts.bg || 'blue')
     }
 
-    this.padding = opts.padding || {
-      left: 2,
-      right: 2,
-      top: 1,
-      bottom: 1
-    }
-    if (typeof this.padding === 'number') {
-      this.padding = {
-        left: this.padding,
-        right: this.padding,
-        top: this.padding,
-        bottom: this.padding
-      }
-    }
+    this.padding = preparePadding(opts.padding)
     this.x += this.padding.left
     this.y += this.padding.top
     this.size = {
@@ -78,18 +82,23 @@ class Menu extends EventEmitter {
     return duplexer(this._input, this._output)
   }
 
-  add (label, cb) {
-    var index = this.items.length
-    if (cb) {
-      this.on('select', function (x, ix) {
-        if (ix === index) cb(x, ix)
+  add (item, cb) {
+    if (typeof item === 'string') {
+      item = { label: item }
+    }
+    if (typeof cb === 'function') {
+      item.handler = cb
+    }
+    if (item.handler) {
+      this.on('select', (selectedItem, index) => {
+        if (selectedItem === item) item.handler(item, index)
       })
     }
 
-    this.items.push({
+    this.entries.push({
       x: this.x,
       y: this.y,
-      label: label
+      item: item
     })
     this._fillLine(this.y)
     this.y++
@@ -103,11 +112,11 @@ class Menu extends EventEmitter {
     }
   }
 
-  jump (name) {
-    var index = typeof name === 'number'
-      ? name
-      : this.items
-        .findIndex(item => item.label === name)
+  jump (label) {
+    var index = typeof label === 'number'
+      ? label
+      : this.entries
+        .findIndex(entry => entry.label === label)
 
     if (index < 0) return
     var prev = this.selected
@@ -154,7 +163,7 @@ class Menu extends EventEmitter {
     for (let i = 0; i < this.padding.top; i++) {
       this._fillLine(this.init.y + i)
     }
-    for (let i = 0; i < this.items.length; i++) this._drawRow(i)
+    for (let i = 0; i < this.entries.length; i++) this._drawRow(i)
 
     // reset foreground and background colors
     this.charm.background(this.colors.bg)
@@ -166,9 +175,9 @@ class Menu extends EventEmitter {
   }
 
   _drawRow (index) {
-    index = (index + this.items.length) % this.items.length
-    var item = this.items[index]
-    this.charm.position(item.x, item.y)
+    index = (index + this.entries.length) % this.entries.length
+    const entry = this.entries[index]
+    this.charm.position(entry.x, entry.y)
 
     if (this.selected === index) {
       this.charm.background(this.colors.fg)
@@ -178,9 +187,9 @@ class Menu extends EventEmitter {
       this.charm.foreground(this.colors.fg)
     }
 
-    var len = this.width - wcstring(item.label).size() + 1
+    var len = this.width - wcstring(entry.item.label).size() + 1
 
-    this.charm.write(item.label + Array(Math.max(0, len)).join(' '))
+    this.charm.write(entry.item.label + Array(Math.max(0, len)).join(' '))
   }
 
   _ondata (buf) {
@@ -188,8 +197,7 @@ class Menu extends EventEmitter {
     while (bytes.length) {
       var codes = [].join.call(bytes, '.')
       if (/^(27.91.65|27,79.65|107|16)\b/.test(codes)) { // up or k
-        this.selected = (this.selected - 1 + this.items.length) %
-                    this.items.length
+        this.selected = (this.selected - 1 + this.entries.length) % this.entries.length
 
         this._drawRow(this.selected + 1)
         this._drawRow(this.selected)
@@ -197,7 +205,7 @@ class Menu extends EventEmitter {
         else bytes.splice(0, 3)
       }
       if (/^(27.91.66|27.79.66|106|14)\b/.test(codes)) { // down or j
-        this.selected = (this.selected + 1) % this.items.length
+        this.selected = (this.selected + 1) % this.entries.length
         this._drawRow(this.selected - 1)
         this._drawRow(this.selected)
         if (/^106\b/.test(codes)) bytes.shift()
@@ -208,9 +216,10 @@ class Menu extends EventEmitter {
         this._output.end()
         bytes.shift()
       } else if (/^(13|10)\b/.test(codes)) { // enter
-        this.charm.position(1, this.items[this.items.length - 1].y + 2)
+        this.charm.position(1, this.entries[this.entries.length - 1].y + 2)
         this.charm.display('reset')
-        this.emit('select', this.items[this.selected].label, this.selected)
+        const item = this.entries[this.selected].item
+        this.emit('select', item.label, this.selected, item)
         bytes.shift()
       } else bytes.shift()
     }
