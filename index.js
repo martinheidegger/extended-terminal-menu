@@ -12,7 +12,7 @@ module.exports = function (opts) {
 
 const keywordLookup = supportsColor.supportsColor().has256 ? color.keyword.ansi256 : color.keyword.ansi16
 const KEYS = {
-  up: /^(27.91.65|27,79.65|107|16)\b/, // up or k
+  up: /^(27.91.65|27.79.65|107|16)\b/, // up or k
   down: /^(27.91.66|27.79.66|106|14)\b/, // down or j
   enter: /^(13|10)\b/,
   close: /^(3|113)/ // ^C or q
