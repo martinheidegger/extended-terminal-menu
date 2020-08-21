@@ -199,7 +199,7 @@ module.exports = class Menu extends EventEmitter {
     this.charm.display('reset')
     const item = this.entries[this.selected].item
     if (typeof item.handler === 'function') {
-      item.handler(item, this.selected)
+      item.handler(item.label, this.selected, item)
     }
     this.emit('select', item.line, this.selected, item)
   }
