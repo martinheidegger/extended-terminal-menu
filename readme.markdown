@@ -16,10 +16,6 @@ This is an extended/updated version of `terminal-menu`, it contains following ch
 - It has an updated syntax to Node 6
 - It contains typescript definitions
 
----
-
-![terminal menu](http://substack.net/images/screenshots/terminal_menu.png)
-
 ## example
 
 ``` js
