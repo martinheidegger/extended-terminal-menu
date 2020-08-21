@@ -189,9 +189,10 @@ module.exports = class Menu extends EventEmitter {
       this.charm.foreground(this.colors.fg)
     }
 
-    var len = this.width - wcstring(entry.item.label).size() + 1
+    var len = this.width - wcstring(entry.item.line).size() + 1
 
-    this.charm.write(entry.item.label + Array(Math.max(0, len)).join(' '))
+    this.charm.write(entry.item.line + Array(Math.max(0, len)).join(' '))
+  }
   }
 
   _ondata (buf) {
