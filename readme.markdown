@@ -23,8 +23,8 @@ This is an extended/updated version of `terminal-menu`, it contains following ch
 ## example
 
 ``` js
-var Menu = require('extended-terminal-menu');
-var menu = Menu({ width: 29, x: 4, y: 2 });
+var TerminalMenu = require('extended-terminal-menu');
+var menu = new TerminalMenu({ width: 29, x: 4, y: 2 });
 menu.reset();
 menu.write('SERIOUS BUSINESS TERMINAL\n');
 menu.write('-------------------------\n');
@@ -54,10 +54,10 @@ menu.on('close', function () {
 ## methods
 
 ``` js
-var createMenu = require('extended-terminal-menu')
+const TerminalMenu = require('extended-terminal-menu')
 ```
 
-## var menu = createMenu(opts)
+## var menu = new TerminalMenu(opts)
 
 Create a menu with `opts`:
 
