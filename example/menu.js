@@ -1,5 +1,5 @@
-var Menu = require('../')
-var menu = Menu({ width: 29, x: 4, y: 2 })
+var TerminalMenu = require('../')
+var menu = new TerminalMenu({ width: 29, x: 4, y: 2 })
 menu.reset()
 menu.write('SERIOUS BUSINESS TERMINAL\n')
 menu.write('-------------------------\n')
