@@ -193,6 +193,15 @@ module.exports = class Menu extends EventEmitter {
 
     this.charm.write(entry.item.line + Array(Math.max(0, len)).join(' '))
   }
+
+  confirmSelection () {
+    this.charm.position(1, this.entries[this.entries.length - 1].y + 2)
+    this.charm.display('reset')
+    const item = this.entries[this.selected].item
+    if (typeof item.handler === 'function') {
+      item.handler(item, this.selected)
+    }
+    this.emit('select', item.line, this.selected, item)
   }
 
   _ondata (buf) {
@@ -218,13 +227,7 @@ module.exports = class Menu extends EventEmitter {
         this.close()
         bytes.shift()
       } else if (KEYS.enter.test(codes)) {
-        this.charm.position(1, this.entries[this.entries.length - 1].y + 2)
-        this.charm.display('reset')
-        const item = this.entries[this.selected].item
-        this.emit('select', item.line, this.selected, item)
-        if (typeof item.handler === 'function') {
-          item.handler(item, this.selected)
-        }
+        this.confirmSelection()
         bytes.shift()
       } else bytes.shift()
     }
